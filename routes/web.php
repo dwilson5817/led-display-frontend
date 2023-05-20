@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\DisplayController;
+use App\Models\Display;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -32,4 +34,16 @@ Route::middleware([
     Route::get('/dashboard', function () {
         return Inertia::render('Dashboard');
     })->name('dashboard');
+
+    Route::get('/display', function () {
+        return Inertia::render('Display/List', ['displays' => auth()->user()->displays]);
+    })->name('display.list');
+
+    Route::post('/display', [DisplayController::class, 'store'])->name('display.store');
+
+    Route::get('/display/{display}', function (Display $display) {
+        return Inertia::render('Display/Show', ['display' => $display]);
+    })->name('display.show');
+
+    Route::delete('/display/{display}', [DisplayController::class, 'delete'])->name('display.delete');
 });
